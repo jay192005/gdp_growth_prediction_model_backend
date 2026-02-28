@@ -19,7 +19,22 @@ from config import DATASET_PATH
 from firebase_auth import initialize_firebase_auth, require_auth
 
 app = Flask(__name__)
-CORS(app)
+
+# CORS Configuration
+# For production, restrict to your Vercel frontend domain
+# Update this after deploying frontend to Vercel
+CORS(app, resources={
+    r"/*": {
+        "origins": [
+            "http://localhost:5173",  # Local development
+            "http://localhost:3000",  # Alternative local port
+            "https://*.vercel.app",   # Vercel preview deployments
+            "https://your-frontend-domain.vercel.app"  # Your production domain
+        ],
+        "methods": ["GET", "POST", "OPTIONS"],
+        "allow_headers": ["Content-Type", "Authorization"]
+    }
+})
 
 # Global variables
 model = None
